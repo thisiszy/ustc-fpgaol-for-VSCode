@@ -10,16 +10,54 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:ustc-fpgaol.helloWorld"
+		"onView:ustc-fpgaol-explorer",
+        "onCommand:ustc-fpgaol.login",
+        "onCommand:ustc-fpgaol.welcome"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "ustc-fpgaol.helloWorld",
-				"title": "Hello World"
+				"command": "ustc-fpgaol.login",
+				"title": "Login",
+				"category": "FPGAOL",
+				"icon": "$(debug-start)"
+			},
+			{
+				"command": "ustc-fpgaol.welcome",
+				"title": "Welcome",
+				"icon": "$(debug-start)"
 			}
-		]
+		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "ustc-fpgaol-explorer",
+					"title": "fpgaol",
+					"icon": "media/icon.svg"
+				}
+			]
+		},
+		"views": {
+			"ustc-fpgaol-explorer": [
+			{
+				"id": "Commands",
+				"name": "功能"
+			},
+			{
+				"id": "Status",
+				"name": "状态"
+			}
+			]
+		},
+		"menus": {
+			"view/title": [
+			  {
+				"when": "view == Commands",
+				"command": "ustc-fpgaol.login"
+			  }
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",
