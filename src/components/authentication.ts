@@ -1,6 +1,6 @@
 import { ExplorerCommanders } from '../components/commanders';
 import * as vscode from 'vscode';
-import { CAS_CAPTCHA_URL, CAS_LOGIN_URL, CAS_RETURN_URL, HTTP_HEADER } from '../utils/const';
+import { CAS_CAPTCHA_URL, CAS_FPGAOL_LOGOUT_URL, CAS_LOGIN_URL, CAS_LOGOUT_URL, CAS_RETURN_URL, HTTP_HEADER } from '../utils/const';
 import { HttpService } from "./httpservice";
 import * as fs from "fs";
 import * as path from "path";
@@ -13,6 +13,18 @@ export class AuthenticateService {
     }
     public async logout(httpService: HttpService) {
         try {
+            httpService.session({
+                url: CAS_FPGAOL_LOGOUT_URL,
+                method: 'get',
+                json: true,
+                headers: HTTP_HEADER
+            });
+            httpService.session({
+                url: CAS_LOGOUT_URL,
+                method: 'get',
+                json: true,
+                headers: HTTP_HEADER
+            });
             httpService.clearCookie();
         } catch (error) {
             console.log(error);
@@ -20,10 +32,10 @@ export class AuthenticateService {
         vscode.window.showInformationMessage('注销成功！');
     }
 
-    public async login(httpService: HttpService) {
+    public async login(httpService: HttpService): Promise<boolean> {
         if (await httpService.isAuthenticated()) {
             vscode.window.showInformationMessage('已登陆，无需重复登录');
-            return;
+            return Promise.reject();
         }
         let panel: vscode.WebviewPanel | undefined = undefined;
         do {
@@ -50,7 +62,7 @@ export class AuthenticateService {
                     captcahLt = lt[0];
                 }
             }
-            if (!captcahLt) { return; }
+            if (!captcahLt) { return Promise.reject();}
 
             // save captcha
             let captchaImg = await httpService.session(
@@ -69,13 +81,13 @@ export class AuthenticateService {
                 placeHolder: "",
                 ignoreFocusOut: true
             });
-            if (!username) {return;}
+            if (!username) {return Promise.reject();}
             var password: string | undefined = await vscode.window.showInputBox({
                 prompt: "输入密码",
                 placeHolder: "",
                 ignoreFocusOut: true
             });
-            if (!password) {return;}
+            if (!password) {return Promise.reject();}
 
             panel = vscode.window.createWebviewPanel(
                 'captcha',
@@ -100,7 +112,7 @@ export class AuthenticateService {
                 placeHolder: "",
                 ignoreFocusOut: true
             });
-            if (!captchaCode) {return;}
+            if (!captchaCode) {return Promise.reject();}
             resp = await httpService.session({
                     url: CAS_LOGIN_URL,
                     method: 'POST',
@@ -127,5 +139,6 @@ export class AuthenticateService {
                 break;
             }
         } while (true);
+        return Promise.resolve(true);
     }
 }

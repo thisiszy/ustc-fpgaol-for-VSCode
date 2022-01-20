@@ -36,9 +36,14 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('ustc-fpgaol.login', async () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
-			await authenticateService.login(httpService);
-			await deviceManager.updateDeviceStatus(undefined, true, httpService);
-			explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
+			try{
+				await authenticateService.login(httpService);
+				await deviceManager.updateDeviceStatus(undefined, true, httpService);
+				explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
+			}
+			catch (e){
+				console.log(e);
+			}
 		})
 	);
 
