@@ -46,7 +46,7 @@ export class HttpService {
 
     async isAuthenticated(): Promise<boolean>  {
         try{
-            var req = await this.session({
+            await this.session({
                 url: CHECK_PAGE,
                 method: "get",
                 resolveWithFullResponse: true,

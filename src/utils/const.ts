@@ -6,13 +6,26 @@ export const CAS_RETURN_URL = "https://fpgaol.ustc.edu.cn/accounts/login_with_ti
 
 export const CHECK_PAGE = "https://fpgaol.ustc.edu.cn/fpga/usage/";
 
-export const FPGAOL_1_ACQUIRE_URL = "https://fpgaol.ustc.edu.cn/fpga/acquire/?device_type=1";
-export const FPGAOL_2_ACQUIRE_URL = "https://fpgaol.ustc.edu.cn/fpga/acquire/?device_type=2";
-export const FPGAOL_ZYBO_ACQUIRE_URL = "https://fpgaol.ustc.edu.cn/fpga/acquire/?device_type=3";
-
-export const FPGAOL_1_RELEASE_URL = "https://fpgaol.ustc.edu.cn/fpga/release/?device_type=1";
-export const FPGAOL_2_RELEASE_URL = "https://fpgaol.ustc.edu.cn/fpga/release/?device_type=2";
-export const FPGAOL_ZYBO_RELEASE_URL = "https://fpgaol.ustc.edu.cn/fpga/release/?device_type=3";
+export const DEVICE: Record<string, Record<string, string>> = {
+    FPGAOL1: {
+        TYPE: "FPGAOL1",
+        NAME: "FPGAOL 1.0",
+        ACQUIRE_URL: "https://fpgaol.ustc.edu.cn/fpga/acquire/?device_type=1",
+        RELEASE_URL: "https://fpgaol.ustc.edu.cn/fpga/release/?device_type=1"
+    },
+    FPGAOL2: {
+        TYPE: "FPGAOL2",
+        NAME: "FPGAOL 2.0",
+        ACQUIRE_URL: "https://fpgaol.ustc.edu.cn/fpga/acquire/?device_type=2",
+        RELEASE_URL: "https://fpgaol.ustc.edu.cn/fpga/release/?device_type=2"
+    },
+    ZYBO: {
+        TYPE: "ZYBO",
+        NAME: "ZYBO Linaro",
+        ACQUIRE_URL: "https://fpgaol.ustc.edu.cn/fpga/acquire/?device_type=3",
+        RELEASE_URL: "https://fpgaol.ustc.edu.cn/fpga/release/?device_type=3"
+    }
+};
 
 export const HTTP_HEADER = {
     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',

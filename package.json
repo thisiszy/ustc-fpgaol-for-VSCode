@@ -13,6 +13,7 @@
 		"onView:ustc-fpgaol-explorer",
 		"onCommand:ustc-fpgaol.login",
 		"onCommand:ustc-fpgaol.logout",
+		"onCommand:ustc-fpgaol.refreshStatus",
 		"onCommand:ustc-fpgaol.welcome"
 	],
 	"main": "./dist/extension.js",
@@ -21,19 +22,23 @@
 			{
 				"command": "ustc-fpgaol.login",
 				"title": "Login",
-				"category": "FPGAOL",
-				"icon": "$(debug-start)"
+				"category": "FPGAOL"
 			},
 			{
 				"command": "ustc-fpgaol.logout",
 				"title": "Logout",
-				"category": "FPGAOL",
-				"icon": "$(debug-start)"
+				"category": "FPGAOL"
 			},
 			{
 				"command": "ustc-fpgaol.welcome",
 				"title": "Welcome",
-				"icon": "$(debug-start)"
+				"category": "FPGAOL"
+			},
+			{
+				"command": "ustc-fpgaol.refreshStatus",
+				"title": "Refresh Status",
+				"icon": "media/refresh.svg",
+				"category": "FPGAOL"
 			}
 		],
 		"viewsContainers": {
@@ -66,6 +71,11 @@
 				{
 					"when": "view == Commands",
 					"command": "ustc-fpgaol.logout"
+				},
+				{
+					"when": "view == Status",
+					"command": "ustc-fpgaol.refreshStatus",
+					"group": "navigation"
 				}
 			]
 		}
@@ -100,6 +110,7 @@
 	"dependencies": {
 		"@types/pug": "^2.0.6",
 		"@types/request-promise": "^4.1.48",
+		"jssoup": "^0.0.15",
 		"pug": "^3.0.2",
 		"request-promise": "^4.2.5",
 		"requests": "^0.3.0"

@@ -11,7 +11,7 @@ export class AuthenticateService {
         // protected profileService: ProfileService,
         protected feedTreeViewProvider: ExplorerCommanders) {
     }
-    public logout(httpService: HttpService) {
+    public async logout(httpService: HttpService) {
         try {
             httpService.clearCookie();
             this.feedTreeViewProvider.refresh();
@@ -31,6 +31,9 @@ export class AuthenticateService {
         }
         let panel: vscode.WebviewPanel | undefined = undefined;
         do {
+            if (panel !== undefined) {
+                panel.dispose();
+            }
             let resp = await httpService.session(
                 {
                     url: CAS_LOGIN_URL,
@@ -40,7 +43,6 @@ export class AuthenticateService {
                     headers: HTTP_HEADER
                 }
             );
-            console.log(httpService.cookieJar);
 
             var reg = /<input.*?name="CAS_LT".*?>/;
             var x = reg.exec(resp);
@@ -66,26 +68,25 @@ export class AuthenticateService {
             fs.writeFileSync(path.join(getExtensionPath(), 'tmp', 'captcha.png'), captchaImg);
 
             // display captcha
-            if (panel !== undefined) {
-                panel.dispose();
-            }
+            var username: string | undefined = await vscode.window.showInputBox({
+                prompt: "输入学号",
+                placeHolder: "",
+                ignoreFocusOut: true
+            });
+            if (!username) {return;}
+            var password: string | undefined = await vscode.window.showInputBox({
+                prompt: "输入密码",
+                placeHolder: "",
+                ignoreFocusOut: true
+            });
+            if (!password) {return;}
+
             panel = vscode.window.createWebviewPanel(
                 'captcha',
                 '验证码',
                 vscode.ViewColumn.One,
                 {}
             );
-            var username: string | undefined = await vscode.window.showInputBox({
-                prompt: "输入学号",
-                placeHolder: "",
-                ignoreFocusOut: true
-            });
-            var password: string | undefined = await vscode.window.showInputBox({
-                prompt: "输入密码",
-                placeHolder: "",
-                ignoreFocusOut: true
-            });
-
             const imgSrc = panel.webview.asWebviewUri(vscode.Uri.file(path.join(getExtensionPath(), 'tmp', 'captcha.png'))
             );
             
@@ -103,6 +104,7 @@ export class AuthenticateService {
                 placeHolder: "",
                 ignoreFocusOut: true
             });
+            if (!captchaCode) {return;}
             resp = await httpService.session({
                     url: CAS_LOGIN_URL,
                     method: 'POST',
@@ -129,6 +131,6 @@ export class AuthenticateService {
                 panel.dispose();
                 break;
             }
-    } while (true);
+        } while (true);
     }
 }
