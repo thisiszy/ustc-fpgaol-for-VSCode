@@ -1,7 +1,10 @@
-import { CHIP_TYPE, COMPILE_URLS } from "../utils/const";
+import { CHIP_TYPE, COMPILE_STATUS, COMPILE_URLS } from "../utils/const";
 import { HttpService } from "./httpservice";
 
 export class CompileManager{
+    private jobs: Set<string> = new Set();
+    curStatus: Record<string, string> = {};
+
     constructor(){};
 
     public async compile(jobId: string, filepath: string, httpService: HttpService): Promise<boolean>{
@@ -17,17 +20,30 @@ export class CompileManager{
             json: true
         });
         console.log(resp);
-        return Promise.resolve(JSON.parse(resp)["code"] === 1);
+        this.jobs.add(jobId);
+        return Promise.resolve(resp["code"] === 1);
     }
 
-    public async query(jobId: string, httpService: HttpService): Promise<boolean>{
+    public async query(jobId: string, httpService: HttpService): Promise<number>{
         let resp = await httpService.session({
             url: COMPILE_URLS.QUERY + jobId,
             method: 'GET',
             json: true
         });
-        console.log(resp);
-        return Promise.resolve(JSON.parse(resp)["code"] === 1);
+        return Promise.resolve(resp["data"]['status']);
+    }
+
+    public async queryAll(httpService: HttpService){
+        this.curStatus = {};
+        for (var jobId of this.jobs){
+            var resp = await httpService.session({
+                url: COMPILE_URLS.QUERY + jobId,
+                method: 'GET',
+                json: true
+            });
+            this.curStatus[jobId] = COMPILE_STATUS[resp["data"]['status']];
+        }
+        console.log(this.curStatus);
     }
 
     public async download(jobId: string, httpService: HttpService): Promise<boolean>{
@@ -37,7 +53,11 @@ export class CompileManager{
             json: true
         });
         console.log(resp);
-        return Promise.resolve(JSON.parse(resp)["code"] === 1);
+        return Promise.resolve(resp["code"] === 1);
+    }
+
+    public addFile(jobId: string){
+        this.jobs.add(jobId);
     }
 
     private getBase64(filepath: string){

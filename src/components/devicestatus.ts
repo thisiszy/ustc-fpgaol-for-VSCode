@@ -10,31 +10,31 @@ export class ExplorerDeviceStatus implements vscode.TreeDataProvider<Status> {
     constructor() {
     }
 
-    updateDeviceStatus(deviceConst: any) {
+    updateDeviceStatus(curStatus: any) {
         this.contents.splice(0);
         const Collapsed = vscode.TreeItemCollapsibleState.Collapsed;
         const Expanded = vscode.TreeItemCollapsibleState.Expanded;
         const None = vscode.TreeItemCollapsibleState.None;
-        const device1 = new Status(`FPGAOL 1.0 (${deviceConst[DEVICE.FPGAOL1.TYPE]['availableNum']}/${deviceConst[DEVICE.FPGAOL1.TYPE]['totalNum']})`, Expanded, undefined, 'notebook-kernel-select');
-        const device2 = new Status(`FPGAOL 2.0 (${deviceConst[DEVICE.FPGAOL2.TYPE]['availableNum']}/${deviceConst[DEVICE.FPGAOL2.TYPE]['totalNum']})`, Expanded, undefined, 'notebook-kernel-select');
-        const device3 = new Status(`ZYBO Linaro (${deviceConst[DEVICE.ZYBO.TYPE]['availableNum']}/${deviceConst[DEVICE.ZYBO.TYPE]['totalNum']})`, Expanded, undefined, 'notebook-kernel-select');
+        const device1 = new Status(`FPGAOL 1.0 (${curStatus[DEVICE.FPGAOL1.TYPE]['availableNum']}/${curStatus[DEVICE.FPGAOL1.TYPE]['totalNum']})`, Expanded, undefined, 'notebook-kernel-select');
+        const device2 = new Status(`FPGAOL 2.0 (${curStatus[DEVICE.FPGAOL2.TYPE]['availableNum']}/${curStatus[DEVICE.FPGAOL2.TYPE]['totalNum']})`, Expanded, undefined, 'notebook-kernel-select');
+        const device3 = new Status(`ZYBO Linaro (${curStatus[DEVICE.ZYBO.TYPE]['availableNum']}/${curStatus[DEVICE.ZYBO.TYPE]['totalNum']})`, Expanded, undefined, 'notebook-kernel-select');
         this.contents.push(device1);
         this.contents.push(device2);
         this.contents.push(device3);
-        if (deviceConst[DEVICE.FPGAOL1.TYPE]['isAcquired']) {
-            device1.children.push(new Status(`Device ID: ${deviceConst[DEVICE.FPGAOL1.TYPE]['totalNum']}`, None, undefined, 'dash'));
-            device1.children.push(new Status(`Expire: ${deviceConst[DEVICE.FPGAOL1.TYPE]['expireTime']}`, None, undefined, 'dash'));
-            device1.children.push(new Status(`Open Device`, None, {command: 'ustc-fpgaol.openDevice', title: '', arguments: [deviceConst[DEVICE.FPGAOL1.TYPE]['link']]}, 'open-preview'));
+        if (curStatus[DEVICE.FPGAOL1.TYPE]['isAcquired']) {
+            device1.children.push(new Status(`Device ID: ${curStatus[DEVICE.FPGAOL1.TYPE]['totalNum']}`, None, undefined, 'dash'));
+            device1.children.push(new Status(`Expire: ${curStatus[DEVICE.FPGAOL1.TYPE]['expireTime']}`, None, undefined, 'dash'));
+            device1.children.push(new Status(`Open Device`, None, {command: 'ustc-fpgaol.openDevice', title: '', arguments: [curStatus[DEVICE.FPGAOL1.TYPE]['link']]}, 'open-preview'));
         }
-        if (deviceConst[DEVICE.FPGAOL2.TYPE]['isAcquired']) {
-            device2.children.push(new Status(`Device ID: ${deviceConst[DEVICE.FPGAOL2.TYPE]['totalNum']}`, None, undefined, 'dash'));
-            device2.children.push(new Status(`Expire: ${deviceConst[DEVICE.FPGAOL2.TYPE]['expireTime']}`, None, undefined, 'dash'));
-            device2.children.push(new Status(`Open Device`, None, {command: 'ustc-fpgaol.openDevice', title: '', arguments: [deviceConst[DEVICE.FPGAOL2.TYPE]['link']]}, 'open-preview'));
+        if (curStatus[DEVICE.FPGAOL2.TYPE]['isAcquired']) {
+            device2.children.push(new Status(`Device ID: ${curStatus[DEVICE.FPGAOL2.TYPE]['totalNum']}`, None, undefined, 'dash'));
+            device2.children.push(new Status(`Expire: ${curStatus[DEVICE.FPGAOL2.TYPE]['expireTime']}`, None, undefined, 'dash'));
+            device2.children.push(new Status(`Open Device`, None, {command: 'ustc-fpgaol.openDevice', title: '', arguments: [curStatus[DEVICE.FPGAOL2.TYPE]['link']]}, 'open-preview'));
         }
-        if (deviceConst[DEVICE.ZYBO.TYPE]['isAcquired']) {
-            device3.children.push(new Status(`Device ID: ${deviceConst[DEVICE.ZYBO.TYPE]['totalNum']}`, None, {command: 'ustc-fpgaol.acquire', title: '', arguments: ['FPGAOL1']}, 'dash'));
-            device3.children.push(new Status(`Expire: ${deviceConst[DEVICE.ZYBO.TYPE]['expireTime']}`, None, undefined, 'dash'));
-            device3.children.push(new Status(`Open Device`, None, {command: 'ustc-fpgaol.openDevice', title: '', arguments: [deviceConst[DEVICE.ZYBO.TYPE]['link']]}, 'open-preview'));
+        if (curStatus[DEVICE.ZYBO.TYPE]['isAcquired']) {
+            device3.children.push(new Status(`Device ID: ${curStatus[DEVICE.ZYBO.TYPE]['totalNum']}`, None, {command: 'ustc-fpgaol.acquire', title: '', arguments: ['FPGAOL1']}, 'dash'));
+            device3.children.push(new Status(`Expire: ${curStatus[DEVICE.ZYBO.TYPE]['expireTime']}`, None, undefined, 'dash'));
+            device3.children.push(new Status(`Open Device`, None, {command: 'ustc-fpgaol.openDevice', title: '', arguments: [curStatus[DEVICE.ZYBO.TYPE]['link']]}, 'open-preview'));
         }
         this._onDidChangeTreeData.fire();
     }

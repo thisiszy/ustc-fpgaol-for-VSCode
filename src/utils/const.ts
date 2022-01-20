@@ -37,11 +37,20 @@ export const DEVICE: Record<string, Record<string, string>> = {
 };
 
 export enum COMPILE_URLS {
-    SUBMIT = '202.38.79.96:18888/submit',
-    QUERY = '202.38.79.96:18888/query/',
-    DOWNLOAD = '202.38.79.96:18888/download/'
+    SUBMIT = 'http://202.38.79.96:18888/submit',
+    QUERY = 'http://202.38.79.96:18888/query/',
+    DOWNLOAD = 'http://202.38.79.96:18888/download/',
+    FILE = 'http://202.38.79.96:18887/'
 };
 
 export enum CHIP_TYPE {
     ARTIX7 = 'xc7a100tcsg324-1'
+};
+
+export const COMPILE_STATUS: Record<number, string> = {
+    0: 'FATAL',
+    1: 'RUNNING',
+    2: 'PENDING',
+    3: 'SUCCESS',
+    4: 'FAILED'
 };

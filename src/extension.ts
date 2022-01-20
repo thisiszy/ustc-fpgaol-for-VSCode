@@ -70,6 +70,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('ustc-fpgaol.openDevice', (url: string) => {
+			vscode.env.openExternal(vscode.Uri.parse(url));
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ustc-fpgaol.download', (url: string) => {
 			vscode.window.showInformationMessage(url);
 			vscode.env.openExternal(vscode.Uri.parse(url));
 		})
@@ -107,13 +113,31 @@ export function activate(context: vscode.ExtensionContext) {
 			if (jobid === undefined) {
 				return;
 			}
-			compileManager.query(jobid, httpService);
+			var status = await compileManager.query(jobid, httpService);
+			console.log(status);
 		})
 	);
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('ustc-fpgaol.refreshCompileStatus', async () => {
 			vscode.window.showInformationMessage('refresh CompileStatus!');
+			await compileManager.queryAll(httpService);
+			console.log(compileManager.curStatus);
+			explorerCompileStatus.updateCompileStatus(compileManager.curStatus);
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ustc-fpgaol.addJob', async () => {
+			var jobid: string | undefined = await vscode.window.showInputBox({
+                prompt: "Add",
+                placeHolder: "",
+                ignoreFocusOut: true
+            });
+			if (jobid === undefined) {
+				return;
+			}
+			compileManager.addFile(jobid);
 		})
 	);
 	

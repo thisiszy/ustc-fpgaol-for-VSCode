@@ -18,6 +18,8 @@
 		"onCommand:ustc-fpgaol.compile",
 		"onCommand:ustc-fpgaol.queryCompileStatus",
 		"onCommand:ustc-fpgaol.refreshCompileStatus",
+		"onCommand:ustc-fpgaol.download",
+		"onCommand:ustc-fpgaol.addJob",
 		"onCommand:ustc-fpgaol.welcome"
 	],
 	"main": "./dist/extension.js",
@@ -63,6 +65,11 @@
 				"command": "ustc-fpgaol.refreshCompileStatus",
 				"title": "Refresh Compile Status",
 				"icon": "media/refresh.svg",
+				"category": "FPGAOL"
+			},
+			{
+				"command": "ustc-fpgaol.addJob",
+				"title": "Add Job",
 				"category": "FPGAOL"
 			}
 		],
