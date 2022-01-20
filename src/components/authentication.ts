@@ -14,7 +14,6 @@ export class AuthenticateService {
     public async logout(httpService: HttpService) {
         try {
             httpService.clearCookie();
-            this.feedTreeViewProvider.refresh();
         } catch (error) {
             console.log(error);
         }
@@ -22,10 +21,7 @@ export class AuthenticateService {
     }
 
     public async login(httpService: HttpService) {
-        if (!await httpService.isAuthenticated()) {
-            vscode.window.showWarningMessage('尚未登陆，请先登录！');
-        }
-        else{
+        if (await httpService.isAuthenticated()) {
             vscode.window.showInformationMessage('已登陆，无需重复登录');
             return;
         }
@@ -120,7 +116,6 @@ export class AuthenticateService {
                         LT: captchaCode,
                     },
                     json: true,
-                    resolveWithFullResponse: true,
                     followAllRedirects: true
             });
             if (!await httpService.isAuthenticated()) {

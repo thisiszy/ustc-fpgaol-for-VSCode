@@ -6,6 +6,15 @@ export const CAS_RETURN_URL = "https://fpgaol.ustc.edu.cn/accounts/login_with_ti
 
 export const CHECK_PAGE = "https://fpgaol.ustc.edu.cn/fpga/usage/";
 
+export const HTTP_HEADER = {
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'accept-encoding': 'gzip, deflate, sdch, br',
+    'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6',
+    'connection': 'keep-alive',
+    'upgrade-Insecure-Requests': '1',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36'
+};
+
 export const DEVICE: Record<string, Record<string, string>> = {
     FPGAOL1: {
         TYPE: "FPGAOL1",
@@ -27,11 +36,12 @@ export const DEVICE: Record<string, Record<string, string>> = {
     }
 };
 
-export const HTTP_HEADER = {
-    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    'accept-encoding': 'gzip, deflate, sdch, br',
-    'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6',
-    'connection': 'keep-alive',
-    'upgrade-Insecure-Requests': '1',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36'
+export enum COMPILE_URLS {
+    SUBMIT = '202.38.79.96:18888/submit',
+    QUERY = '202.38.79.96:18888/query/',
+    DOWNLOAD = '202.38.79.96:18888/download/'
+};
+
+export enum CHIP_TYPE {
+    ARTIX7 = 'xc7a100tcsg324-1'
 };

@@ -8,16 +8,20 @@ import { DeviceManager } from './components/devicemanager';
 import { getExtensionPath, setContext } from "./utils/tools";
 import * as fs from "fs";
 import * as path from "path";
-import { ExplorerStatus } from './components/status';
+import { ExplorerDeviceStatus } from './components/devicestatus';
+import { CompileManager } from './components/compilemanager';
+import { ExplorerCompileStatus } from './components/compilestatus';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	const explorerCommanders = new ExplorerCommanders();
-	const explorerStatus = new ExplorerStatus();
+	const explorerDeviceStatus = new ExplorerDeviceStatus();
 	const authenticateService = new AuthenticateService(explorerCommanders);
 	const httpService = new HttpService();
 	const deviceManager = new DeviceManager();
+	const compileManager = new CompileManager();
+	const explorerCompileStatus = new ExplorerCompileStatus();
 	setContext(context);
 	var tmpPath = path.join(getExtensionPath(), 'tmp');
 	if (!fs.existsSync(tmpPath)){
@@ -34,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// Display a message box to the user
 			await authenticateService.login(httpService);
 			await deviceManager.updateDeviceStatus(undefined, true, httpService);
-			explorerStatus.updateStatus(deviceManager.curStatus);
+			explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
 		})
 	);
 
@@ -53,14 +57,14 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('ustc-fpgaol.acquire', async (type: string) => {
 			await deviceManager.acquireDevice(type, httpService);
-			explorerStatus.updateStatus(deviceManager.curStatus);
+			explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
 		})
 	);
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('ustc-fpgaol.release', async (type: string) => {
 			await deviceManager.releaseDevice(type, httpService);
-			explorerStatus.updateStatus(deviceManager.curStatus);
+			explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
 		})
 	);
 
@@ -72,14 +76,50 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ustc-fpgaol.refreshStatus', async () => {
+		vscode.commands.registerCommand('ustc-fpgaol.refreshDeviceStatus', async () => {
 			await deviceManager.updateDeviceStatus(undefined, true, httpService);
-			explorerStatus.updateStatus(deviceManager.curStatus);
+			explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ustc-fpgaol.compile', async (uri:vscode.Uri) => {
+			vscode.window.showInformationMessage(uri.fsPath);
+			var jobid: string | undefined = await vscode.window.showInputBox({
+                prompt: "提交：输入Job ID",
+                placeHolder: "",
+                ignoreFocusOut: true
+            });
+			if (jobid === undefined) {
+				return;
+			}
+			compileManager.compile(jobid, uri.fsPath, httpService);
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ustc-fpgaol.queryCompileStatus', async () => {
+			var jobid: string | undefined = await vscode.window.showInputBox({
+                prompt: "查询：输入Job ID",
+                placeHolder: "",
+                ignoreFocusOut: true
+            });
+			if (jobid === undefined) {
+				return;
+			}
+			compileManager.query(jobid, httpService);
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ustc-fpgaol.refreshCompileStatus', async () => {
+			vscode.window.showInformationMessage('refresh CompileStatus!');
 		})
 	);
 	
 	vscode.window.registerTreeDataProvider('Commands', explorerCommanders);
-	vscode.window.registerTreeDataProvider('Status', explorerStatus);
+	vscode.window.registerTreeDataProvider('DeviceStatus', explorerDeviceStatus);
+	vscode.window.registerTreeDataProvider('CompileStatus', explorerCompileStatus);
 
 }
 

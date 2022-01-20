@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { DEVICE } from '../utils/const';
 
-export class ExplorerStatus implements vscode.TreeDataProvider<Status> {
+export class ExplorerDeviceStatus implements vscode.TreeDataProvider<Status> {
     
     private readonly contents: Status[] = [];
     private _onDidChangeTreeData: vscode.EventEmitter<Status | undefined | null | void> = new vscode.EventEmitter<Status | undefined | null | void>();
@@ -10,7 +10,7 @@ export class ExplorerStatus implements vscode.TreeDataProvider<Status> {
     constructor() {
     }
 
-    updateStatus(deviceConst: any) {
+    updateDeviceStatus(deviceConst: any) {
         this.contents.splice(0);
         const Collapsed = vscode.TreeItemCollapsibleState.Collapsed;
         const Expanded = vscode.TreeItemCollapsibleState.Expanded;
@@ -62,7 +62,7 @@ export class ExplorerStatus implements vscode.TreeDataProvider<Status> {
     }
 }
 
-export class Status {
+class Status {
 
     public children: Status[] = [];
 

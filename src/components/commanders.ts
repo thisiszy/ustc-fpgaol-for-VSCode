@@ -50,13 +50,9 @@ export class ExplorerCommanders implements vscode.TreeDataProvider<Command> {
 
         return element.children;
     }
-
-    refresh(): void {
-        this._onDidChangeTreeData.fire();
-    }
 }
 
-export class Command {
+class Command {
 
     public children: Command[] = [];
 

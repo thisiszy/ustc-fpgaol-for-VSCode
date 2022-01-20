@@ -13,8 +13,11 @@
 		"onView:ustc-fpgaol-explorer",
 		"onCommand:ustc-fpgaol.login",
 		"onCommand:ustc-fpgaol.logout",
-		"onCommand:ustc-fpgaol.refreshStatus",
+		"onCommand:ustc-fpgaol.refreshDeviceStatus",
 		"onCommand:ustc-fpgaol.openDevice",
+		"onCommand:ustc-fpgaol.compile",
+		"onCommand:ustc-fpgaol.queryCompileStatus",
+		"onCommand:ustc-fpgaol.refreshCompileStatus",
 		"onCommand:ustc-fpgaol.welcome"
 	],
 	"main": "./dist/extension.js",
@@ -36,7 +39,7 @@
 				"category": "FPGAOL"
 			},
 			{
-				"command": "ustc-fpgaol.refreshStatus",
+				"command": "ustc-fpgaol.refreshDeviceStatus",
 				"title": "Refresh Status",
 				"icon": "media/refresh.svg",
 				"category": "FPGAOL"
@@ -44,6 +47,22 @@
 			{
 				"command": "ustc-fpgaol.openDevice",
 				"title": "Open",
+				"category": "FPGAOL"
+			},
+			{
+				"command": "ustc-fpgaol.compile",
+				"title": "Compile Current File",
+				"category": "FPGAOL"
+			},
+			{
+				"command": "ustc-fpgaol.queryCompileStatus",
+				"title": "Query Compile Status",
+				"category": "FPGAOL"
+			},
+			{
+				"command": "ustc-fpgaol.refreshCompileStatus",
+				"title": "Refresh Compile Status",
+				"icon": "media/refresh.svg",
 				"category": "FPGAOL"
 			}
 		],
@@ -63,8 +82,12 @@
 					"name": "功能"
 				},
 				{
-					"id": "Status",
-					"name": "状态"
+					"id": "CompileStatus",
+					"name": "编译状态"
+				},
+				{
+					"id": "DeviceStatus",
+					"name": "设备状态"
 				}
 			]
 		},
@@ -79,8 +102,20 @@
 					"command": "ustc-fpgaol.logout"
 				},
 				{
-					"when": "view == Status",
-					"command": "ustc-fpgaol.refreshStatus",
+					"when": "view == DeviceStatus",
+					"command": "ustc-fpgaol.refreshDeviceStatus",
+					"group": "navigation"
+				},
+				{
+					"when": "view == CompileStatus",
+					"command": "ustc-fpgaol.refreshCompileStatus",
+					"group": "navigation"
+				}
+			],
+			"explorer/context": [
+				{
+					"when": "resourceFilename =~ /\\.zip/",
+					"command": "ustc-fpgaol.compile",
 					"group": "navigation"
 				}
 			]
