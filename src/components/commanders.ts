@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 export class ExplorerCommanders implements vscode.TreeDataProvider<Command> {
     
     private readonly commands: Command[] = [];
+	private _onDidChangeTreeData: vscode.EventEmitter<vscode.TreeItem | undefined> = new vscode.EventEmitter<vscode.TreeItem | undefined>();
 
     constructor() {
         this.buildCommander();
@@ -35,6 +36,10 @@ export class ExplorerCommanders implements vscode.TreeDataProvider<Command> {
 
         return element.children;
     }
+
+	refresh(node?: vscode.TreeItem): void {
+		this._onDidChangeTreeData.fire(node);
+	}
 }
 
 export class Command {

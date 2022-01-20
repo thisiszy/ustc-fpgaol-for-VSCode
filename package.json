@@ -1,5 +1,5 @@
 {
-  "name": "ustc-fpgaol",
+	"name": "ustc-fpgaol",
 	"displayName": "USTC-FPGAOL",
 	"description": "",
 	"version": "0.0.1",
@@ -11,8 +11,9 @@
 	],
 	"activationEvents": [
 		"onView:ustc-fpgaol-explorer",
-        "onCommand:ustc-fpgaol.login",
-        "onCommand:ustc-fpgaol.welcome"
+		"onCommand:ustc-fpgaol.login",
+		"onCommand:ustc-fpgaol.logout",
+		"onCommand:ustc-fpgaol.welcome"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
@@ -20,6 +21,12 @@
 			{
 				"command": "ustc-fpgaol.login",
 				"title": "Login",
+				"category": "FPGAOL",
+				"icon": "$(debug-start)"
+			},
+			{
+				"command": "ustc-fpgaol.logout",
+				"title": "Logout",
 				"category": "FPGAOL",
 				"icon": "$(debug-start)"
 			},
@@ -40,22 +47,26 @@
 		},
 		"views": {
 			"ustc-fpgaol-explorer": [
-			{
-				"id": "Commands",
-				"name": "功能"
-			},
-			{
-				"id": "Status",
-				"name": "状态"
-			}
+				{
+					"id": "Commands",
+					"name": "功能"
+				},
+				{
+					"id": "Status",
+					"name": "状态"
+				}
 			]
 		},
 		"menus": {
 			"view/title": [
-			  {
-				"when": "view == Commands",
-				"command": "ustc-fpgaol.login"
-			  }
+				{
+					"when": "view == Commands",
+					"command": "ustc-fpgaol.login"
+				},
+				{
+					"when": "view == Commands",
+					"command": "ustc-fpgaol.logout"
+				}
 			]
 		}
 	},
@@ -71,19 +82,26 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.63.0",
 		"@types/glob": "^7.2.0",
 		"@types/mocha": "^9.0.0",
 		"@types/node": "14.x",
+		"@types/vscode": "^1.63.0",
 		"@typescript-eslint/eslint-plugin": "^5.9.1",
 		"@typescript-eslint/parser": "^5.9.1",
+		"@vscode/test-electron": "^2.0.3",
 		"eslint": "^8.6.0",
 		"glob": "^7.2.0",
 		"mocha": "^9.1.3",
-		"typescript": "^4.5.4",
 		"ts-loader": "^9.2.6",
+		"typescript": "^4.5.4",
 		"webpack": "^5.66.0",
-		"webpack-cli": "^4.9.1",
-		"@vscode/test-electron": "^2.0.3"
+		"webpack-cli": "^4.9.1"
+	},
+	"dependencies": {
+		"@types/pug": "^2.0.6",
+		"@types/request-promise": "^4.1.48",
+		"pug": "^3.0.2",
+		"request-promise": "^4.2.5",
+		"requests": "^0.3.0"
 	}
 }
