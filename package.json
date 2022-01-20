@@ -157,10 +157,9 @@
 	},
 	"dependencies": {
 		"@types/pug": "^2.0.6",
-		"@types/request-promise": "^4.1.48",
 		"jssoup": "^0.0.15",
 		"pug": "^3.0.2",
-		"request-promise": "^4.2.5",
+		"request-promise": "^4.2.6",
 		"requests": "^0.3.0"
 	}
 }
