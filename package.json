@@ -14,6 +14,7 @@
 		"onCommand:ustc-fpgaol.login",
 		"onCommand:ustc-fpgaol.logout",
 		"onCommand:ustc-fpgaol.refreshStatus",
+		"onCommand:ustc-fpgaol.openDevice",
 		"onCommand:ustc-fpgaol.welcome"
 	],
 	"main": "./dist/extension.js",
@@ -38,6 +39,11 @@
 				"command": "ustc-fpgaol.refreshStatus",
 				"title": "Refresh Status",
 				"icon": "media/refresh.svg",
+				"category": "FPGAOL"
+			},
+			{
+				"command": "ustc-fpgaol.openDevice",
+				"title": "Open",
 				"category": "FPGAOL"
 			}
 		],

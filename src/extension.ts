@@ -65,7 +65,14 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('ustc-fpgaol.refreshStatus', async (type: string) => {
+		vscode.commands.registerCommand('ustc-fpgaol.openDevice', (url: string) => {
+			vscode.window.showInformationMessage(url);
+			vscode.env.openExternal(vscode.Uri.parse(url));
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ustc-fpgaol.refreshStatus', async () => {
 			await deviceManager.updateDeviceStatus(undefined, true, httpService);
 			explorerStatus.updateStatus(deviceManager.curStatus);
 		})

@@ -24,14 +24,17 @@ export class ExplorerStatus implements vscode.TreeDataProvider<Status> {
         if (deviceConst[DEVICE.FPGAOL1.TYPE]['isAcquired']) {
             device1.children.push(new Status(`Device ID: ${deviceConst[DEVICE.FPGAOL1.TYPE]['totalNum']}`, None, undefined, 'dash'));
             device1.children.push(new Status(`Expire: ${deviceConst[DEVICE.FPGAOL1.TYPE]['expireTime']}`, None, undefined, 'dash'));
+            device1.children.push(new Status(`Open Device`, None, {command: 'ustc-fpgaol.openDevice', title: '', arguments: [deviceConst[DEVICE.FPGAOL1.TYPE]['link']]}, 'open-preview'));
         }
         if (deviceConst[DEVICE.FPGAOL2.TYPE]['isAcquired']) {
             device2.children.push(new Status(`Device ID: ${deviceConst[DEVICE.FPGAOL2.TYPE]['totalNum']}`, None, undefined, 'dash'));
             device2.children.push(new Status(`Expire: ${deviceConst[DEVICE.FPGAOL2.TYPE]['expireTime']}`, None, undefined, 'dash'));
+            device2.children.push(new Status(`Open Device`, None, {command: 'ustc-fpgaol.openDevice', title: '', arguments: [deviceConst[DEVICE.FPGAOL2.TYPE]['link']]}, 'open-preview'));
         }
         if (deviceConst[DEVICE.ZYBO.TYPE]['isAcquired']) {
             device3.children.push(new Status(`Device ID: ${deviceConst[DEVICE.ZYBO.TYPE]['totalNum']}`, None, {command: 'ustc-fpgaol.acquire', title: '', arguments: ['FPGAOL1']}, 'dash'));
             device3.children.push(new Status(`Expire: ${deviceConst[DEVICE.ZYBO.TYPE]['expireTime']}`, None, undefined, 'dash'));
+            device3.children.push(new Status(`Open Device`, None, {command: 'ustc-fpgaol.openDevice', title: '', arguments: [deviceConst[DEVICE.ZYBO.TYPE]['link']]}, 'open-preview'));
         }
         this._onDidChangeTreeData.fire();
     }
