@@ -2,9 +2,13 @@
 	"name": "ustc-fpgaol",
 	"displayName": "USTC-FPGAOL",
 	"description": "",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"engines": {
 		"vscode": "^1.63.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/thisiszy/ustc-fpgaol-for-VSCode.git"
 	},
 	"categories": [
 		"Other"
