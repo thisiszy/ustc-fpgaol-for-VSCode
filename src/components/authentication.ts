@@ -33,7 +33,7 @@ export class AuthenticateService {
     public async login(httpService: HttpService): Promise<boolean> {
         if (await this.isAuthenticated(httpService)) {
             vscode.window.showInformationMessage('已登陆，无需重复登录');
-            return Promise.reject();
+            return Promise.resolve(true);
         }
         let panel: vscode.WebviewPanel | undefined = undefined;
         do {
