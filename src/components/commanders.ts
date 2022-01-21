@@ -15,11 +15,11 @@ export class ExplorerCommanders implements vscode.TreeDataProvider<Command> {
         const Collapsed = vscode.TreeItemCollapsibleState.Collapsed;
         const Expanded = vscode.TreeItemCollapsibleState.Expanded;
         const None = vscode.TreeItemCollapsibleState.None;
-        const deviceFolder = new Command('Device Commands', Collapsed, undefined, 'notebook-kernel-select');
+        const deviceFolder = new Command('Device Commands', Expanded, undefined, 'notebook-kernel-select');
         this.commands.push(deviceFolder);
-        const fpgaol1Commands = new Command('FPGAOL 1.0', Expanded, undefined, 'circuit-board');
-        const fpgaol2Commands = new Command('FPGAOL 2.0', Expanded, undefined, 'circuit-board');
-        const fpgaolzyboCommands = new Command('ZYBO Linaro', Expanded, undefined, 'circuit-board');
+        const fpgaol1Commands = new Command('FPGAOL 1.0', Collapsed, undefined, 'circuit-board');
+        const fpgaol2Commands = new Command('FPGAOL 2.0', Collapsed, undefined, 'circuit-board');
+        const fpgaolzyboCommands = new Command('ZYBO Linaro', Collapsed, undefined, 'circuit-board');
         deviceFolder.children.push(fpgaol1Commands);
         deviceFolder.children.push(fpgaol2Commands);
         deviceFolder.children.push(fpgaolzyboCommands);

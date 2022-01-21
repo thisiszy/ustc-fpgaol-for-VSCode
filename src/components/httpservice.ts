@@ -11,39 +11,11 @@ export class HttpService {
         this.session = request.defaults( { jar: this.cookieJar } );
     }
 
-    // public async sendRequest(options: any): Promise<any> {
-    //     options.headers = HTTP_HEADER;
-    //     var returnBody;
-    //     if (
-    //         options.resolveWithFullResponse === undefined ||
-    //         options.resolveWithFullResponse === false
-    //     ) {
-    //         returnBody = true;
-    //     } else {
-    //         returnBody = false;
-    //     }
-    //     options.resolveWithFullResponse = true;
-
-    //     options.simple = false;
-
-    //     // var resp;
-    //     // try {
-
-    //     // } catch (error) {
-    //     //     // vscode.window.showInformationMessage('请求错误');
-    //     //     return Promise.resolve(null);
-    //     // }
-    //     // if (returnBody) {
-    //     //     return Promise.resolve(resp.body);
-    //     // } else {
-    //     //     return Promise.resolve(resp);
-    //     // }
-    // }
-
     public clearCookie() {
         this.cookieJar = require('request-promise').jar();
     }
 
+    // 判断是否已经登录
     async isAuthenticated(): Promise<boolean>  {
         try{
             await this.session({
@@ -63,5 +35,4 @@ export class HttpService {
 
 var httpService = new HttpService();
 
-// export const sendRequest = httpService.sendRequest;
 export const clearCookie = httpService.clearCookie;

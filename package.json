@@ -16,7 +16,6 @@
 		"onCommand:ustc-fpgaol.refreshDeviceStatus",
 		"onCommand:ustc-fpgaol.openDevice",
 		"onCommand:ustc-fpgaol.compile",
-		"onCommand:ustc-fpgaol.queryCompileStatus",
 		"onCommand:ustc-fpgaol.refreshCompileStatus",
 		"onCommand:ustc-fpgaol.download",
 		"onCommand:ustc-fpgaol.addJob",
@@ -28,11 +27,13 @@
 			{
 				"command": "ustc-fpgaol.login",
 				"title": "Login",
+				"icon": "$(log-in)",
 				"category": "FPGAOL"
 			},
 			{
 				"command": "ustc-fpgaol.logout",
 				"title": "Logout",
+				"icon": "$(log-out)",
 				"category": "FPGAOL"
 			},
 			{
@@ -42,8 +43,8 @@
 			},
 			{
 				"command": "ustc-fpgaol.refreshDeviceStatus",
-				"title": "Refresh Status",
-				"icon": "media/refresh.svg",
+				"title": "Refresh Device Status",
+				"icon": "$(refresh)",
 				"category": "FPGAOL"
 			},
 			{
@@ -57,14 +58,9 @@
 				"category": "FPGAOL"
 			},
 			{
-				"command": "ustc-fpgaol.queryCompileStatus",
-				"title": "Query Compile Status",
-				"category": "FPGAOL"
-			},
-			{
 				"command": "ustc-fpgaol.refreshCompileStatus",
 				"title": "Refresh Compile Status",
-				"icon": "media/refresh.svg",
+				"icon": "$(refresh)",
 				"category": "FPGAOL"
 			},
 			{
@@ -102,7 +98,8 @@
 			"view/title": [
 				{
 					"when": "view == Commands",
-					"command": "ustc-fpgaol.login"
+					"command": "ustc-fpgaol.login",
+					"group": "navigation"
 				},
 				{
 					"when": "view == Commands",

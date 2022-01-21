@@ -1,11 +1,16 @@
 import { CHIP_TYPE, COMPILE_STATUS, COMPILE_URLS } from "../utils/const";
 import { HttpService } from "./httpservice";
+import * as fs from "fs";
+import * as path from "path";
+import { getExtensionPath } from "../utils/tools";
 
 export class CompileManager{
     private jobs: Set<string> = new Set();
     curStatus: Record<string, string> = {};
 
-    constructor(){};
+    constructor(){
+        this.loadJobs();
+    };
 
     public async compile(jobId: string, filepath: string, httpService: HttpService): Promise<boolean>{
         let file = this.getBase64(filepath);
@@ -19,8 +24,8 @@ export class CompileManager{
             },
             json: true
         });
-        console.log(resp);
         this.jobs.add(jobId);
+        this.saveJobs();
         return Promise.resolve(resp["code"] === 1);
     }
 
@@ -43,7 +48,6 @@ export class CompileManager{
             });
             this.curStatus[jobId] = COMPILE_STATUS[resp["data"]['status']];
         }
-        console.log(this.curStatus);
     }
 
     public async download(jobId: string, httpService: HttpService): Promise<boolean>{
@@ -58,11 +62,28 @@ export class CompileManager{
 
     public addFile(jobId: string){
         this.jobs.add(jobId);
+        this.saveJobs();
     }
 
     private getBase64(filepath: string){
         const fs = require('fs');
         const contents = fs.readFileSync(filepath, {encoding: 'base64'});
         return contents;
+    }
+
+    public saveJobs(){
+        try {
+            fs.writeFileSync(path.join(getExtensionPath(), 'storage', 'jobCache'), JSON.stringify(Array.from(this.jobs.values())));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    public loadJobs(){
+        try {
+            this.jobs = new Set(JSON.parse(fs.readFileSync(path.join(getExtensionPath(), 'storage', 'jobCache'), {encoding: 'utf-8'})));
+        } catch (error) {
+            console.log(error);
+        }
     }
 } 

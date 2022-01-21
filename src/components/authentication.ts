@@ -85,6 +85,7 @@ export class AuthenticateService {
             var password: string | undefined = await vscode.window.showInputBox({
                 prompt: "输入密码",
                 placeHolder: "",
+                password: true,
                 ignoreFocusOut: true
             });
             if (!password) {return Promise.reject();}

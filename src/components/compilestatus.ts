@@ -16,7 +16,7 @@ export class ExplorerCompileStatus implements vscode.TreeDataProvider<Status> {
         const Expanded = vscode.TreeItemCollapsibleState.Expanded;
         const None = vscode.TreeItemCollapsibleState.None;
         for (var [key, value] of Object.entries(curStatus)){
-            var job = new Status(`${key}`, Expanded, undefined, 'symbol-constructor');
+            var job = new Status(`${key}`, Collapsed, undefined, 'symbol-constructor');
             this.contents.push(job);
             job.children.push(new Status(`Status: ${value}`, None, undefined, 'dash'));
             if (value === 'SUCCESS'){
