@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('ustc-fpgaol.login', async () => {
 			try{
 				await authenticateService.login(httpService);
-				await deviceManager.updateDeviceStatus(undefined, true, httpService);
+				await deviceManager.updateDeviceStatus(undefined, true, httpService, authenticateService);
 				explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
 			}
 			catch (e){
@@ -57,14 +57,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('ustc-fpgaol.acquire', async (type: string) => {
-			await deviceManager.acquireDevice(type, httpService);
+			await deviceManager.acquireDevice(type, httpService, authenticateService);
 			explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
 		})
 	);
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('ustc-fpgaol.release', async (type: string) => {
-			await deviceManager.releaseDevice(type, httpService);
+			await deviceManager.releaseDevice(type, httpService, authenticateService);
 			explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
 		})
 	);
@@ -83,7 +83,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('ustc-fpgaol.refreshDeviceStatus', async () => {
-			await deviceManager.updateDeviceStatus(undefined, true, httpService);
+			await deviceManager.updateDeviceStatus(undefined, true, httpService, authenticateService);
 			explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
 		})
 	);

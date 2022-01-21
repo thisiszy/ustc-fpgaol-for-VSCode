@@ -1,38 +1,43 @@
-import { HTTP_HEADER, CHECK_PAGE } from "../utils/const";
+import path = require("path");
+import { getExtensionPath } from "../utils/tools";
+import * as fs from 'fs';
 
 
 export class HttpService {
     public session: any;
-    public cookieJar: any;
+    public cookieJar: any = undefined;
 
     constructor() {
-        const request = require('request-promise');
-        this.cookieJar = request.jar();
-        this.session = request.defaults( { jar: this.cookieJar } );
+            const request = require('request-promise');
+            this.session = request;
     }
 
-    public clearCookie() {
-        this.cookieJar = require('request-promise').jar();
+    public async sendRequest(options: any): Promise<any> {
+        this.getCookies();
+        options.jar = this.cookieJar;
+        var resp = await this.session(options);
+        return Promise.resolve(resp);
     }
 
-    // 判断是否已经登录
-    async isAuthenticated(): Promise<boolean>  {
-        try{
-            await this.session({
-                url: CHECK_PAGE,
-                method: "get",
-                resolveWithFullResponse: true,
-                header: HTTP_HEADER,
-                json: true,
-                followRedirect: false
-            });
-            return Promise.resolve(true);
-        } catch(error: any) {
-            return Promise.resolve(false);
+    public getCookies() {
+        let cookiePath = path.join(getExtensionPath(), 'storage', 'cookies.json');
+        if(!fs.existsSync(cookiePath)){
+            fs.writeFileSync(cookiePath, '');
+        }
+        if (!this.cookieJar){
+            const request = require('request-promise');
+            var fileCookieStore = require('tough-cookie-filestore');
+            this.cookieJar = request.jar(new fileCookieStore(cookiePath));
         }
     }
+
+    // public clearCookie() {
+    //     let cookiePath = path.join(getExtensionPath(), 'storage', 'cookies.json');
+    //     this.cookieJar = undefined;
+    //     fs.writeFileSync(cookiePath, '');
+    // }
 }
 
 var httpService = new HttpService();
 
-export const clearCookie = httpService.clearCookie;
+// export const clearCookie = httpService.clearCookie;

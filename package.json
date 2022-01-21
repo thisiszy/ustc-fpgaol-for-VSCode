@@ -157,6 +157,7 @@
 		"jssoup": "^0.0.15",
 		"pug": "^3.0.2",
 		"request-promise": "^4.2.6",
-		"requests": "^0.3.0"
+		"requests": "^0.3.0",
+		"tough-cookie-filestore": "^0.0.1"
 	}
 }

@@ -1,6 +1,6 @@
 import { ExplorerCommanders } from '../components/commanders';
 import * as vscode from 'vscode';
-import { CAS_CAPTCHA_URL, CAS_FPGAOL_LOGOUT_URL, CAS_LOGIN_URL, CAS_LOGOUT_URL, CAS_RETURN_URL, HTTP_HEADER } from '../utils/const';
+import { CAS_CAPTCHA_URL, CAS_FPGAOL_LOGOUT_URL, CAS_LOGIN_URL, CAS_LOGOUT_URL, CAS_RETURN_URL, CHECK_PAGE, HTTP_HEADER } from '../utils/const';
 import { HttpService } from "./httpservice";
 import * as fs from "fs";
 import * as path from "path";
@@ -8,24 +8,22 @@ import { getExtensionPath } from "../utils/tools";
 
 export class AuthenticateService {
     constructor(
-        // protected profileService: ProfileService,
         protected feedTreeViewProvider: ExplorerCommanders) {
     }
     public async logout(httpService: HttpService) {
         try {
-            httpService.session({
+            httpService.sendRequest({
                 url: CAS_FPGAOL_LOGOUT_URL,
                 method: 'get',
                 json: true,
                 headers: HTTP_HEADER
             });
-            httpService.session({
+            httpService.sendRequest({
                 url: CAS_LOGOUT_URL,
                 method: 'get',
                 json: true,
                 headers: HTTP_HEADER
             });
-            httpService.clearCookie();
         } catch (error) {
             console.log(error);
         }
@@ -33,7 +31,7 @@ export class AuthenticateService {
     }
 
     public async login(httpService: HttpService): Promise<boolean> {
-        if (await httpService.isAuthenticated()) {
+        if (await this.isAuthenticated(httpService)) {
             vscode.window.showInformationMessage('已登陆，无需重复登录');
             return Promise.reject();
         }
@@ -42,7 +40,7 @@ export class AuthenticateService {
             if (panel !== undefined) {
                 panel.dispose();
             }
-            let resp = await httpService.session(
+            let resp = await httpService.sendRequest(
                 {
                     url: CAS_LOGIN_URL,
                     method: 'get',
@@ -65,7 +63,7 @@ export class AuthenticateService {
             if (!captcahLt) { return Promise.reject();}
 
             // save captcha
-            let captchaImg = await httpService.session(
+            let captchaImg = await httpService.sendRequest(
                 {
                     url: CAS_CAPTCHA_URL,
                     method: 'get',
@@ -114,7 +112,7 @@ export class AuthenticateService {
                 ignoreFocusOut: true
             });
             if (!captchaCode) {return Promise.reject();}
-            resp = await httpService.session({
+            await httpService.sendRequest({
                     url: CAS_LOGIN_URL,
                     method: 'POST',
                     form: {
@@ -131,7 +129,7 @@ export class AuthenticateService {
                     json: true,
                     followAllRedirects: true
             });
-            if (!await httpService.isAuthenticated()) {
+            if (!await this.isAuthenticated(httpService)) {
                 vscode.window.showWarningMessage('信息错误，请重新输入');
             }
             else {
@@ -141,5 +139,22 @@ export class AuthenticateService {
             }
         } while (true);
         return Promise.resolve(true);
+    }
+
+    // 判断是否已经登录
+    async isAuthenticated(httpService: HttpService): Promise<boolean> {
+        try {
+            await httpService.sendRequest({
+                url: CHECK_PAGE,
+                method: "get",
+                resolveWithFullResponse: true,
+                header: HTTP_HEADER,
+                json: true,
+                followRedirect: false
+            });
+            return Promise.resolve(true);
+        } catch (error: any) {
+            return Promise.resolve(false);
+        }
     }
 }

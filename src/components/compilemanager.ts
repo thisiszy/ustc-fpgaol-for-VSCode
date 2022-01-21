@@ -14,7 +14,7 @@ export class CompileManager{
 
     public async compile(jobId: string, filepath: string, httpService: HttpService): Promise<boolean>{
         let file = this.getBase64(filepath);
-        let resp = await httpService.session({
+        let resp = await httpService.sendRequest({
             url: COMPILE_URLS.SUBMIT,
             method: 'POST',
             form: {
@@ -30,7 +30,7 @@ export class CompileManager{
     }
 
     public async query(jobId: string, httpService: HttpService): Promise<number>{
-        let resp = await httpService.session({
+        let resp = await httpService.sendRequest({
             url: COMPILE_URLS.QUERY + jobId,
             method: 'GET',
             json: true
@@ -41,7 +41,7 @@ export class CompileManager{
     public async queryAll(httpService: HttpService){
         this.curStatus = {};
         for (var jobId of this.jobs){
-            var resp = await httpService.session({
+            var resp = await httpService.sendRequest({
                 url: COMPILE_URLS.QUERY + jobId,
                 method: 'GET',
                 json: true
@@ -51,7 +51,7 @@ export class CompileManager{
     }
 
     public async download(jobId: string, httpService: HttpService): Promise<boolean>{
-        let resp = await httpService.session({
+        let resp = await httpService.sendRequest({
             url: COMPILE_URLS.DOWNLOAD + jobId,
             method: 'GET',
             json: true
@@ -83,7 +83,6 @@ export class CompileManager{
         try {
             this.jobs = new Set(JSON.parse(fs.readFileSync(path.join(getExtensionPath(), 'storage', 'jobCache'), {encoding: 'utf-8'})));
         } catch (error) {
-            console.log(error);
         }
     }
 } 

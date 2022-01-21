@@ -5,6 +5,7 @@ node_modules
 *.vsix
 tmp/
 storage/jobCache
+storage/cookies.json
 
 # dev
 src/template

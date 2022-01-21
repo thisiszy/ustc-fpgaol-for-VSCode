@@ -1,6 +1,8 @@
 import { HttpService } from "./httpservice";
 import * as vscode from 'vscode';
 import { CHECK_PAGE, DEVICE, HTTP_HEADER } from "../utils/const";
+import { AuthenticateService } from "./authentication";
+import { assert } from "console";
 
 export class DeviceManager {
     public curStatus: Record<string, Record<string, string | boolean>> = {};
@@ -8,17 +10,17 @@ export class DeviceManager {
     constructor(){
     }
 
-    public async acquireDevice(typeSelected: string, httpService: HttpService): Promise<boolean> {
+    public async acquireDevice(typeSelected: string, httpService: HttpService, authenticateService: AuthenticateService): Promise<boolean> {
         let deviceType: Record<string, string> = DEVICE[typeSelected];
         if (deviceType === undefined){
             vscode.window.showInformationMessage(`${typeSelected} not supported!`);
             return Promise.resolve(false);
         }
-        if (!await httpService.isAuthenticated()){
+        if (!await authenticateService.isAuthenticated(httpService)){
             vscode.window.showWarningMessage('尚未登陆或登陆已过期！');
             return Promise.resolve(false);
         }
-        let resp = await httpService.session({
+        let resp = await httpService.sendRequest({
             url: deviceType.ACQUIRE_URL,
             method: "get",
             header: HTTP_HEADER,
@@ -28,17 +30,17 @@ export class DeviceManager {
         return Promise.resolve(true);
     }
 
-    public async releaseDevice(typeSelected: string, httpService: HttpService): Promise<boolean> {
+    public async releaseDevice(typeSelected: string, httpService: HttpService, authenticateService: AuthenticateService): Promise<boolean> {
         let deviceType: Record<string, string> = DEVICE[typeSelected];
         if (deviceType === undefined){
             vscode.window.showInformationMessage(`${typeSelected} not supported!`);
             return Promise.resolve(false);
         }
-        if (!await httpService.isAuthenticated()){
+        if (!await authenticateService.isAuthenticated(httpService)){
             vscode.window.showWarningMessage('尚未登陆或登陆已过期！');
             return Promise.resolve(false);
         }
-        let resp = await httpService.session({
+        let resp = await httpService.sendRequest({
             url: deviceType.RELEASE_URL,
             method: "get",
             header: HTTP_HEADER,
@@ -48,13 +50,17 @@ export class DeviceManager {
         return Promise.resolve(true);
     }
 
-    public async updateDeviceStatus(resp?: any, needRequest = false, httpService?: any) {
-        if (needRequest && httpService){
-            if (!await httpService.isAuthenticated()){
+    public async updateDeviceStatus(resp?: any, needRequest = false, httpService?: HttpService, authenticateService?: AuthenticateService){
+        if (needRequest){
+            if (!(httpService && authenticateService)){
+                console.log('deviceManager.updateDeviceStatus need httpService and authenticateService');
+                return;
+            };
+            if (!await authenticateService.isAuthenticated(httpService)){
                 vscode.window.showWarningMessage('尚未登陆或登陆已过期！');
                 return;
             }
-            resp = await httpService.session({
+            resp = await httpService.sendRequest({
                 url: CHECK_PAGE,
                 method: "get",
                 header: HTTP_HEADER,
