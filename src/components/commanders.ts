@@ -23,14 +23,14 @@ export class ExplorerCommanders implements vscode.TreeDataProvider<Command> {
         deviceFolder.children.push(fpgaol1Commands);
         deviceFolder.children.push(fpgaol2Commands);
         deviceFolder.children.push(fpgaolzyboCommands);
-        fpgaol1Commands.children.push(new Command('Acquire', None, {command: 'ustc-fpgaol.acquire', title: '', arguments: ['FPGAOL1']}, 'circuit-board'));
-        fpgaol1Commands.children.push(new Command('Release', None, {command: 'ustc-fpgaol.release', title: '', arguments: ['FPGAOL1']}, 'circuit-board'));
+        fpgaol1Commands.children.push(new Command('Acquire', None, {command: 'ustc-fpgaol.acquire', title: '', arguments: ['FPGAOL1']}, 'debug-start'));
+        fpgaol1Commands.children.push(new Command('Release', None, {command: 'ustc-fpgaol.release', title: '', arguments: ['FPGAOL1']}, 'debug-stop'));
 
-        fpgaol2Commands.children.push(new Command('Acquire', None, {command: 'ustc-fpgaol.acquire', title: '', arguments: ['FPGAOL2']}, 'circuit-board'));
-        fpgaol2Commands.children.push(new Command('Release', None, {command: 'ustc-fpgaol.release', title: '', arguments: ['FPGAOL2']}, 'circuit-board'));
+        fpgaol2Commands.children.push(new Command('Acquire', None, {command: 'ustc-fpgaol.acquire', title: '', arguments: ['FPGAOL2']}, 'debug-start'));
+        fpgaol2Commands.children.push(new Command('Release', None, {command: 'ustc-fpgaol.release', title: '', arguments: ['FPGAOL2']}, 'debug-stop'));
 
-        fpgaolzyboCommands.children.push(new Command('Acquire', None, {command: 'ustc-fpgaol.acquire', title: '', arguments: ['ZYBO']}, 'circuit-board'));
-        fpgaolzyboCommands.children.push(new Command('Release', None, {command: 'ustc-fpgaol.release', title: '', arguments: ['ZYBO']}, 'circuit-board'));
+        fpgaolzyboCommands.children.push(new Command('Acquire', None, {command: 'ustc-fpgaol.acquire', title: '', arguments: ['ZYBO']}, 'debug-start'));
+        fpgaolzyboCommands.children.push(new Command('Release', None, {command: 'ustc-fpgaol.release', title: '', arguments: ['ZYBO']}, 'debug-stop'));
     }
 
     getTreeItem(element: Command): vscode.TreeItem {

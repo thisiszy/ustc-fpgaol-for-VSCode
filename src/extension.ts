@@ -5,7 +5,7 @@ import { ExplorerCommanders } from './components/commanders';
 import { HttpService } from "./components/httpservice";
 import { AuthenticateService } from './components/authentication';
 import { DeviceManager } from './components/devicemanager';
-import { getExtensionPath, setContext } from "./utils/tools";
+import { getExtensionPath, setContext, zipDirectory } from "./utils/tools";
 import * as fs from "fs";
 import * as path from "path";
 import { ExplorerDeviceStatus } from './components/devicestatus';
@@ -95,10 +95,25 @@ export function activate(context: vscode.ExtensionContext) {
                 placeHolder: "",
                 ignoreFocusOut: true
             });
-			if (jobid === undefined) {
-				return;
-			}
+			if (jobid === undefined) {return; }
 			await compileManager.compile(jobid, uri.fsPath, httpService);
+			await compileManager.queryAll(httpService);
+			explorerCompileStatus.updateCompileStatus(compileManager.curStatus);
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ustc-fpgaol.compileFolder', async (uri:vscode.Uri) => {
+			vscode.window.showInformationMessage(uri.fsPath);
+			var zipPath = path.join(getExtensionPath(), 'tmp', 'source.zip');
+			zipDirectory(uri.fsPath, zipPath);
+			var jobid: string | undefined = await vscode.window.showInputBox({
+                prompt: "提交：输入Job ID",
+                placeHolder: "",
+                ignoreFocusOut: true
+            });
+			if (jobid === undefined) {return; }
+			await compileManager.compile(jobid, zipPath, httpService);
 			await compileManager.queryAll(httpService);
 			explorerCompileStatus.updateCompileStatus(compileManager.curStatus);
 		})

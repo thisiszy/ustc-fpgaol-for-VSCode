@@ -20,12 +20,12 @@ export class ExplorerCompileStatus implements vscode.TreeDataProvider<Status> {
             this.contents.push(job);
             job.children.push(new Status(`Status: ${value}`, None, undefined, 'dash'));
             if (value === 'SUCCESS'){
-                var download = new Status(`Download`, Collapsed, undefined, 'cloud');
+                var download = new Status(`Download`, Collapsed, undefined, 'cloud-download');
                 job.children.push(download);
-                download.children.push(new Status(`bitstream`, None, { command: 'ustc-fpgaol.download', title: 'Download', arguments: [COMPILE_URLS.FILE+key+'/results/top.bit'] }, 'cloud-download'));
-                download.children.push(new Status(`compiling log`, None, { command: 'ustc-fpgaol.download', title: 'Download', arguments: [COMPILE_URLS.FILE+key+'/compiling.log'] }, 'cloud-download'));
-                download.children.push(new Status(`timing report`, None, { command: 'ustc-fpgaol.download', title: 'Download', arguments: [COMPILE_URLS.FILE+key+'/timing.rpt'] }, 'cloud-download'));
-                download.children.push(new Status(`util report`, None, { command: 'ustc-fpgaol.download', title: 'Download', arguments: [COMPILE_URLS.FILE+key+'/results/util.rpt'] }, 'cloud-download'));
+                download.children.push(new Status(`bitstream`, None, { command: 'ustc-fpgaol.download', title: 'Download', arguments: [COMPILE_URLS.FILE+key+'/results/top.bit'] }, 'file-binary'));
+                download.children.push(new Status(`compiling log`, None, { command: 'ustc-fpgaol.download', title: 'Download', arguments: [COMPILE_URLS.FILE+key+'/compiling.log'] }, 'output'));
+                download.children.push(new Status(`timing report`, None, { command: 'ustc-fpgaol.download', title: 'Download', arguments: [COMPILE_URLS.FILE+key+'/timing.rpt'] }, 'output'));
+                download.children.push(new Status(`util report`, None, { command: 'ustc-fpgaol.download', title: 'Download', arguments: [COMPILE_URLS.FILE+key+'/results/util.rpt'] }, 'output'));
             }
         }
         this._onDidChangeTreeData.fire();

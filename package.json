@@ -2,7 +2,7 @@
 	"name": "ustc-fpgaol",
 	"displayName": "USTC-FPGAOL",
 	"description": "",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"engines": {
 		"vscode": "^1.63.0"
 	},
@@ -20,6 +20,7 @@
 		"onCommand:ustc-fpgaol.refreshDeviceStatus",
 		"onCommand:ustc-fpgaol.openDevice",
 		"onCommand:ustc-fpgaol.compile",
+		"onCommand:ustc-fpgaol.compileFolder",
 		"onCommand:ustc-fpgaol.refreshCompileStatus",
 		"onCommand:ustc-fpgaol.download",
 		"onCommand:ustc-fpgaol.addJob",
@@ -59,6 +60,11 @@
 			{
 				"command": "ustc-fpgaol.compile",
 				"title": "Compile Current File",
+				"category": "FPGAOL"
+			},
+			{
+				"command": "ustc-fpgaol.compileFolder",
+				"title": "Compile This Folder",
 				"category": "FPGAOL"
 			},
 			{
@@ -124,7 +130,12 @@
 				{
 					"when": "resourceFilename =~ /\\.zip/",
 					"command": "ustc-fpgaol.compile",
-					"group": "navigation"
+					"group": "FPGAOL"
+				},
+				{
+					"when": "explorerResourceIsFolder",
+					"command": "ustc-fpgaol.compileFolder",
+					"group": "FPGAOL"
 				}
 			]
 		}
@@ -158,6 +169,7 @@
 	},
 	"dependencies": {
 		"@types/pug": "^2.0.6",
+		"archiver": "^5.3.0",
 		"jssoup": "^0.0.15",
 		"pug": "^3.0.2",
 		"request-promise": "^4.2.6",

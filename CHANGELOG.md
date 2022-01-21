@@ -10,3 +10,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - 设备的获取和释放
 - 监测设备当前状态
 - 提交编译任务/查看编译状态/下载编译文件
+
+## [1.0.1] - 2022-01-21
+### Added
+- 增加编译文件夹功能
+- 修改部分图标
