@@ -56,3 +56,20 @@ export const COMPILE_STATUS: Record<number, string> = {
     3: 'SUCCESS',
     4: 'FAILED'
 };
+
+export const DOWNLOAD_FILE_URL: Record<string, Record<string, string>> = {
+    CONSTRAINT: {
+        XDCFPGAOL1: "https://fpgaol.ustc.edu.cn/download/fpgaol1.xdc",
+        XDCFPGAOL2: "https://fpgaol.ustc.edu.cn/download/fpgaol2.xdc"
+    },
+    EXAMPLE: {
+        BIT: "https://fpgaol.ustc.edu.cn/download/bitstream.zip",
+        VIVADO: "https://fpgaol.ustc.edu.cn/download/example_projects_vivado.zip",
+        ISE: "https://fpgaol.ustc.edu.cn/download/example_projects_ise.zip"
+    },
+    VIVADO: {
+        VIVADO: "https://vlab.ustc.edu.cn/downloadsi/Xilinx_Vivado_SDK_2019.1_0524_1430.tar.gz",
+        ISE_LINUX: "https://fpgaol.ustc.edu.cn/download/xilinx_ise_ds_lin_14.7_1015_1.tar",
+        ISE_WIN: "https://fpgaol.ustc.edu.cn/download/Xilinx_ISE_DS_Win_14.7_1015_1.iso"
+    }
+};
