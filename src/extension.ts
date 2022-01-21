@@ -154,7 +154,17 @@ export function activate(context: vscode.ExtensionContext) {
 			explorerCompileStatus.updateCompileStatus(compileManager.curStatus);
 		})
 	);
-	
+	// 每隔一定时间更新状态栏
+	setInterval(async () => {
+		await compileManager.queryAll(httpService);
+		explorerCompileStatus.updateCompileStatus(compileManager.curStatus);
+	}, 5000);	// 单位毫秒
+	setInterval(async () => {
+		if(await authenticateService.isAuthenticated(httpService)){
+			await deviceManager.updateDeviceStatus(undefined, true, httpService, authenticateService);
+			explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
+		}
+	}, 5000);
 	vscode.window.registerTreeDataProvider('Commands', explorerCommanders);
 	vscode.window.registerTreeDataProvider('DeviceStatus', explorerDeviceStatus);
 	vscode.window.registerTreeDataProvider('CompileStatus', explorerCompileStatus);
