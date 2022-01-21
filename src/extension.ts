@@ -104,7 +104,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('ustc-fpgaol.compileFolder', async (uri:vscode.Uri) => {
-			vscode.window.showInformationMessage(uri.fsPath);
 			var zipPath = path.join(getExtensionPath(), 'tmp', 'source.zip');
 			zipDirectory(uri.fsPath, zipPath);
 			var jobid: string | undefined = await vscode.window.showInputBox({

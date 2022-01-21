@@ -56,7 +56,6 @@ export class CompileManager{
             method: 'GET',
             json: true
         });
-        console.log(resp);
         return Promise.resolve(resp["code"] === 1);
     }
 
