@@ -73,3 +73,11 @@ export const DOWNLOAD_FILE_URL: Record<string, Record<string, string>> = {
         ISE_WIN: "https://fpgaol.ustc.edu.cn/download/Xilinx_ISE_DS_Win_14.7_1015_1.iso"
     }
 };
+
+export enum LOG_LEVEL {
+    DEBUG = 0,
+    INFO = 1,
+    WARN = 2,
+    ERROR = 3,
+    SILENT = 4
+};

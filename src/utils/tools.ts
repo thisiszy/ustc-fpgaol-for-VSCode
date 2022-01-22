@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as vscode from 'vscode';
 import * as fs from "fs";
+import { LOG_LEVEL } from "./const";
 
 var context: vscode.ExtensionContext;
 
@@ -34,4 +35,40 @@ export function zipDirectory(sourceDir: string, outPath: string): Promise<void> 
     stream.on('close', () => resolve());
     archive.finalize();
   });
+}
+
+const channel = vscode.window.createOutputChannel('FPGAOL');
+channel.show(true);
+
+export class Logger{
+  public static level: number = LOG_LEVEL.ERROR;
+  constructor(){}
+  
+  public static debug(str: string): void {
+    if (Logger.level <= LOG_LEVEL.DEBUG){
+      vscode.window.showInformationMessage('DEBUG: ' + str);
+    }
+    channel.appendLine(`[${new Date().toLocaleString()}] [debug] ${str}`);
+  }
+
+  public static info(str: string): void {
+    if (Logger.level <= LOG_LEVEL.INFO){
+      vscode.window.showInformationMessage(str);
+    }
+    channel.appendLine(`[${new Date().toLocaleString()}] [info] ${str}`);
+  }
+  
+  public static warn(str: string): void {
+    if (Logger.level <= LOG_LEVEL.WARN){
+      vscode.window.showWarningMessage(str);
+    }
+    channel.appendLine(`[${new Date().toLocaleString()}] [warn] ${str}`);
+  }
+  
+  public static error(str: string): void {
+    if (Logger.level <= LOG_LEVEL.ERROR){
+      vscode.window.showErrorMessage(str);
+    }
+    channel.appendLine(`[${new Date().toLocaleString()}] [error] ${str}`);
+  }
 }

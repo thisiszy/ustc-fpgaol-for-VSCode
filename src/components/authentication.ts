@@ -1,15 +1,12 @@
-import { ExplorerCommanders } from '../components/commanders';
 import * as vscode from 'vscode';
-import { CAS_CAPTCHA_URL, CAS_FPGAOL_LOGOUT_URL, CAS_LOGIN_URL, CAS_LOGOUT_URL, CAS_RETURN_URL, CHECK_PAGE, HTTP_HEADER } from '../utils/const';
-import { HttpService } from "./httpservice";
 import * as fs from "fs";
 import * as path from "path";
+import { CAS_CAPTCHA_URL, CAS_FPGAOL_LOGOUT_URL, CAS_LOGIN_URL, CAS_LOGOUT_URL, CAS_RETURN_URL, CHECK_PAGE, HTTP_HEADER } from '../utils/const';
+import { HttpService } from "./httpservice";
 import { getExtensionPath } from "../utils/tools";
 
 export class AuthenticateService {
-    constructor(
-        protected feedTreeViewProvider: ExplorerCommanders) {
-    }
+    constructor() {}
     public async logout(httpService: HttpService) {
         try {
             httpService.sendRequest({
@@ -35,11 +32,11 @@ export class AuthenticateService {
             vscode.window.showInformationMessage('已登陆，无需重复登录');
             return Promise.resolve(true);
         }
+        let statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+        statusBarItem.show();
         let panel: vscode.WebviewPanel | undefined = undefined;
         do {
-            if (panel !== undefined) {
-                panel.dispose();
-            }
+            statusBarItem.text = '$(sync~spin) Preparing';
             let resp = await httpService.sendRequest(
                 {
                     url: CAS_LOGIN_URL,
@@ -49,7 +46,6 @@ export class AuthenticateService {
                     headers: HTTP_HEADER
                 }
             );
-
             var reg = /<input.*?name="CAS_LT".*?>/;
             var x = reg.exec(resp);
             reg = /LT-\w*/;
@@ -60,7 +56,7 @@ export class AuthenticateService {
                     captcahLt = lt[0];
                 }
             }
-            if (!captcahLt) { return Promise.reject();}
+            if (!captcahLt) { return Promise.reject("Not find capture id");}
 
             // save captcha
             let captchaImg = await httpService.sendRequest(
@@ -73,21 +69,22 @@ export class AuthenticateService {
             );
             fs.writeFileSync(path.join(getExtensionPath(), 'tmp', 'captcha.png'), captchaImg);
 
-            // display captcha
+            statusBarItem.text = '$(sync~spin) Waiting';
             var username: string | undefined = await vscode.window.showInputBox({
                 prompt: "输入学号",
                 placeHolder: "",
                 ignoreFocusOut: true
             });
-            if (!username) {return Promise.reject();}
+            if (!username) {statusBarItem.dispose();return Promise.reject("abort input");}
             var password: string | undefined = await vscode.window.showInputBox({
                 prompt: "输入密码",
                 placeHolder: "",
                 password: true,
                 ignoreFocusOut: true
             });
-            if (!password) {return Promise.reject();}
+            if (!password) {statusBarItem.dispose();return Promise.reject("abort input");}
 
+            // display captcha
             panel = vscode.window.createWebviewPanel(
                 'captcha',
                 '验证码',
@@ -111,7 +108,9 @@ export class AuthenticateService {
                 placeHolder: "",
                 ignoreFocusOut: true
             });
-            if (!captchaCode) {return Promise.reject();}
+            panel.dispose();
+            if (!captchaCode) {statusBarItem.dispose();return Promise.reject("abort input");}
+            statusBarItem.text = '$(sync~spin) Verifying';
             await httpService.sendRequest({
                     url: CAS_LOGIN_URL,
                     method: 'POST',
@@ -134,7 +133,7 @@ export class AuthenticateService {
             }
             else {
                 vscode.window.showInformationMessage('登录成功！');
-                panel.dispose();
+                statusBarItem.dispose();
                 break;
             }
         } while (true);

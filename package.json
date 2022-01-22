@@ -136,6 +136,9 @@
 					"group": "FPGAOL"
 				}
 			]
+		},
+		"configuration": {
+			"logLevel": "info"
 		}
 	},
 	"scripts": {

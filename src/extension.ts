@@ -5,12 +5,13 @@ import { ExplorerCommanders } from './components/commanders';
 import { HttpService } from "./components/httpservice";
 import { AuthenticateService } from './components/authentication';
 import { DeviceManager } from './components/devicemanager';
-import { getExtensionPath, setContext, zipDirectory } from "./utils/tools";
+import { getExtensionPath, Logger, setContext, zipDirectory } from "./utils/tools";
 import * as fs from "fs";
 import * as path from "path";
 import { ExplorerDeviceStatus } from './components/devicestatus';
 import { CompileManager } from './components/compilemanager';
 import { ExplorerCompileStatus } from './components/compilestatus';
+import { configure } from './components/configure';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -19,11 +20,12 @@ export function activate(context: vscode.ExtensionContext) {
 	setContext(context);
 	const explorerCommanders = new ExplorerCommanders();
 	const explorerDeviceStatus = new ExplorerDeviceStatus();
-	const authenticateService = new AuthenticateService(explorerCommanders);
+	const authenticateService = new AuthenticateService();
 	const httpService = new HttpService();
 	const deviceManager = new DeviceManager();
 	const compileManager = new CompileManager();
 	const explorerCompileStatus = new ExplorerCompileStatus();
+	configure();
 	const tmpPath = path.join(getExtensionPath(), 'tmp');
 	if (!fs.existsSync(tmpPath)){
 		fs.mkdirSync(tmpPath);
@@ -41,8 +43,8 @@ export function activate(context: vscode.ExtensionContext) {
 				await deviceManager.updateDeviceStatus(undefined, true, httpService, authenticateService);
 				explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
 			}
-			catch (e){
-				console.log(e);
+			catch (e: any){
+				Logger.error(e);
 			}
 		})
 	);
