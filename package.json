@@ -2,7 +2,8 @@
 	"name": "ustc-fpgaol",
 	"displayName": "USTC-FPGAOL",
 	"description": "",
-	"version": "1.0.1",
+	"version": "1.0.2",
+	"icon": "./media/icon.png",
 	"engines": {
 		"vscode": "^1.63.0"
 	},
@@ -80,7 +81,7 @@
 				{
 					"id": "ustc-fpgaol-explorer",
 					"title": "FPGAOL",
-					"icon": "media/icon.svg"
+					"icon": "media/explorer.svg"
 				}
 			]
 		},
