@@ -23,6 +23,7 @@
 		"onCommand:ustc-fpgaol.compileFolder",
 		"onCommand:ustc-fpgaol.refreshCompileStatus",
 		"onCommand:ustc-fpgaol.download",
+		"onCommand:ustc-fpgaol.visit",
 		"onCommand:ustc-fpgaol.addJob",
 		"onCommand:ustc-fpgaol.welcome"
 	],
@@ -50,11 +51,6 @@
 				"command": "ustc-fpgaol.refreshDeviceStatus",
 				"title": "Refresh Device Status",
 				"icon": "$(refresh)",
-				"category": "FPGAOL"
-			},
-			{
-				"command": "ustc-fpgaol.openDevice",
-				"title": "Open",
 				"category": "FPGAOL"
 			},
 			{

@@ -38,6 +38,4 @@ export class HttpService {
     // }
 }
 
-var httpService = new HttpService();
-
 // export const clearCookie = httpService.clearCookie;

@@ -15,3 +15,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 - 增加编译文件夹功能
 - 修改部分图标
+
+## [1.0.2] - 2022-01-22
+### Added
+- 在功能栏提供一些文件的下载链接
+- 自动刷新编译状态和设备状态栏

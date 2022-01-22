@@ -24,9 +24,13 @@ export function activate(context: vscode.ExtensionContext) {
 	const deviceManager = new DeviceManager();
 	const compileManager = new CompileManager();
 	const explorerCompileStatus = new ExplorerCompileStatus();
-	var tmpPath = path.join(getExtensionPath(), 'tmp');
+	const tmpPath = path.join(getExtensionPath(), 'tmp');
 	if (!fs.existsSync(tmpPath)){
 		fs.mkdirSync(tmpPath);
+	}
+	const storagePath = path.join(getExtensionPath(), 'storage');
+	if (!fs.existsSync(storagePath)){
+		fs.mkdirSync(storagePath);
 	}
 	console.log('Congratulations, your extension "ustc-fpgaol" is now active!');
 
@@ -74,9 +78,16 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.env.openExternal(vscode.Uri.parse(url));
 		})
 	);
-
+	// 下载文件，目前通过直接访问网页实现
+	// TODO: 独立GUI
 	context.subscriptions.push(
 		vscode.commands.registerCommand('ustc-fpgaol.download', (url: string) => {
+			vscode.env.openExternal(vscode.Uri.parse(url));
+		})
+	);
+	// 访问一个网页
+	context.subscriptions.push(
+		vscode.commands.registerCommand('ustc-fpgaol.visit', (url: string) => {
 			vscode.env.openExternal(vscode.Uri.parse(url));
 		})
 	);
