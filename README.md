@@ -64,8 +64,12 @@
 
 -----------------------------------------------------------------------------------------------------------
 
-### For more details
+## For more details
 
 * [Github](https://github.com/thisiszy/ustc-fpgaol-for-VSCode/tree/master)
 
 ## Known Issues
+
+## Thanks
+- <a href='https://pngtree.com/so/Vector'>extension icon from pngtree.com/</a>
+- FPGAOL dev group
