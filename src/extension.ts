@@ -39,12 +39,13 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('ustc-fpgaol.login', async () => {
 			try{
-				await authenticateService.login(httpService);
-				await deviceManager.updateDeviceStatus(undefined, true, httpService, authenticateService);
-				explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
+				if(await authenticateService.login(httpService)){
+					await deviceManager.updateDeviceStatus(undefined, true, httpService, authenticateService);
+					explorerDeviceStatus.updateDeviceStatus(deviceManager.curStatus);
+				}
 			}
 			catch (e: any){
-				Logger.error(e);
+				Logger.error(e.name + ': ' + e.message);
 			}
 		})
 	);

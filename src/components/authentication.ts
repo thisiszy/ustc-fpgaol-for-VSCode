@@ -3,26 +3,28 @@ import * as fs from "fs";
 import * as path from "path";
 import { CAS_CAPTCHA_URL, CAS_FPGAOL_LOGOUT_URL, CAS_LOGIN_URL, CAS_LOGOUT_URL, CAS_RETURN_URL, CHECK_PAGE, HTTP_HEADER } from '../utils/const';
 import { HttpService } from "./httpservice";
-import { getExtensionPath } from "../utils/tools";
+import { getExtensionPath, Logger } from "../utils/tools";
+import { GlobalVars } from '../utils/global';
 
 export class AuthenticateService {
-    constructor() {}
+    constructor() { }
     public async logout(httpService: HttpService) {
         try {
-            httpService.sendRequest({
+            await httpService.sendRequest({
                 url: CAS_FPGAOL_LOGOUT_URL,
                 method: 'get',
                 json: true,
                 headers: HTTP_HEADER
             });
-            httpService.sendRequest({
+            await httpService.sendRequest({
                 url: CAS_LOGOUT_URL,
                 method: 'get',
                 json: true,
                 headers: HTTP_HEADER
             });
-        } catch (error) {
-            console.log(error);
+            httpService.clearCookie();
+        } catch (error: any) {
+            Logger.error("logout error: " + error.message);
         }
         vscode.window.showInformationMessage('注销成功！');
     }
@@ -30,13 +32,13 @@ export class AuthenticateService {
     public async login(httpService: HttpService): Promise<boolean> {
         if (await this.isAuthenticated(httpService)) {
             vscode.window.showInformationMessage('已登陆，无需重复登录');
-            return Promise.resolve(true);
+            return Promise.resolve(false);
         }
-        let statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-        statusBarItem.show();
+        GlobalVars.statusBarItem.tooltip = "FPGAOL";
+        GlobalVars.statusBarItem.show();
         let panel: vscode.WebviewPanel | undefined = undefined;
         do {
-            statusBarItem.text = '$(sync~spin) Preparing';
+            GlobalVars.statusBarItem.text = '$(sync~spin) Preparing';
             let resp = await httpService.sendRequest(
                 {
                     url: CAS_LOGIN_URL,
@@ -56,7 +58,7 @@ export class AuthenticateService {
                     captcahLt = lt[0];
                 }
             }
-            if (!captcahLt) { return Promise.reject("Not find capture id");}
+            if (!captcahLt) { return Promise.reject("Not find capture"); }
 
             // save captcha
             let captchaImg = await httpService.sendRequest(
@@ -69,22 +71,23 @@ export class AuthenticateService {
             );
             fs.writeFileSync(path.join(getExtensionPath(), 'tmp', 'captcha.png'), captchaImg);
 
-            statusBarItem.text = '$(sync~spin) Waiting';
+            GlobalVars.statusBarItem.text = '$(sync~spin) Waiting';
             var username: string | undefined = await vscode.window.showInputBox({
                 prompt: "输入学号",
                 placeHolder: "",
                 ignoreFocusOut: true
             });
-            if (!username) {statusBarItem.dispose();return Promise.reject("abort input");}
+            if (!username) { GlobalVars.statusBarItem.dispose(); return Promise.resolve(false); }
             var password: string | undefined = await vscode.window.showInputBox({
                 prompt: "输入密码",
                 placeHolder: "",
                 password: true,
                 ignoreFocusOut: true
             });
-            if (!password) {statusBarItem.dispose();return Promise.reject("abort input");}
+            if (!password) { GlobalVars.statusBarItem.dispose(); return Promise.resolve(false); }
 
             // display captcha
+            GlobalVars.statusBarItem.text = '$(sync~spin) Rendering';
             panel = vscode.window.createWebviewPanel(
                 'captcha',
                 '验证码',
@@ -93,7 +96,7 @@ export class AuthenticateService {
             );
             const imgSrc = panel.webview.asWebviewUri(vscode.Uri.file(path.join(getExtensionPath(), 'tmp', 'captcha.png'))
             );
-            
+
             panel.webview.html = `<!DOCTYPE html>
             <html lang="en">
             <body>
@@ -103,37 +106,40 @@ export class AuthenticateService {
                 <img src="${imgSrc.toString()}" width="300" />
             </body>
             </html>`;
+            GlobalVars.statusBarItem.text = '$(sync~spin) Waiting';
             var captchaCode: string | undefined = await vscode.window.showInputBox({
                 prompt: "输入验证码",
                 placeHolder: "",
                 ignoreFocusOut: true
             });
             panel.dispose();
-            if (!captchaCode) {statusBarItem.dispose();return Promise.reject("abort input");}
-            statusBarItem.text = '$(sync~spin) Verifying';
+            if (!captchaCode) { GlobalVars.statusBarItem.dispose(); return Promise.resolve(false); }
+            GlobalVars.statusBarItem.text = '$(sync~spin) Verifying';
             await httpService.sendRequest({
-                    url: CAS_LOGIN_URL,
-                    method: 'POST',
-                    form: {
-                        model: "uplogin.jsp",
-                        service: CAS_RETURN_URL,
-                        warn: "",
-                        showCode: "1",
-                        username: username,
-                        password: password,
-                        button: "",
-                        CAS_LT: captcahLt,
-                        LT: captchaCode,
-                    },
-                    json: true,
-                    followAllRedirects: true
+                url: CAS_LOGIN_URL,
+                method: 'POST',
+                form: {
+                    model: "uplogin.jsp",
+                    service: CAS_RETURN_URL,
+                    warn: "",
+                    showCode: "1",
+                    username: username,
+                    password: password,
+                    button: "",
+                    // 每个验证码都有一个唯一的lt
+                    CAS_LT: captcahLt,
+                    // 验证码数字
+                    LT: captchaCode,
+                },
+                json: true,
+                followAllRedirects: true
             });
             if (!await this.isAuthenticated(httpService)) {
                 vscode.window.showWarningMessage('信息错误，请重新输入');
             }
             else {
                 vscode.window.showInformationMessage('登录成功！');
-                statusBarItem.dispose();
+                GlobalVars.statusBarItem.hide();
                 break;
             }
         } while (true);
