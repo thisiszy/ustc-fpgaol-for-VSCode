@@ -20,3 +20,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 - 在功能栏提供一些文件的下载链接
 - 自动刷新编译状态和设备状态栏
+
+## [1.1.0] - 2022-01-23
+### Added
+- 在登录时显示底部Status Bar
+- 添加了Logger，可以在Output窗口输出log
+- settings.json中添加了`logLevel`,`logginWithCookies`设置，可以设置错误输出等级和选择是否使用cookies登录。
+### Bug fix
+- （好像）修复了注销登陆后重新登录可能导致的cookies文件错误

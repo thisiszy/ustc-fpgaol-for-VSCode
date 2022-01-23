@@ -69,6 +69,7 @@
 * [Github](https://github.com/thisiszy/ustc-fpgaol-for-VSCode/tree/master)
 
 ## Known Issues
+- 登录和注销可能会出现 "Syntax Error: JSON"，如果出现错误可以尝试在`settings.json`中将`logginWithCookies`设置为`false`。
 
 ## Thanks
 - <a href='https://pngtree.com/so/Vector'>extension icon from pngtree.com/</a>
