@@ -46,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			catch (e: any){
 				if (e.name === 'RequestError'){
-					Logger.error(`${e.name}: ${e.message}\nPossible Solution: 1. Update your vscode version.\n2. Add 'tlsRejectUnauthorized: "0" ' to settings.json`);
+					Logger.error(`${e.name}: ${e.message}\nPossible Solution: 1. Update your vscode version.\n2. Add "tlsRejectUnauthorized": "0" to settings.json`);
 				}
 				else{
 					Logger.error(e.name + ': ' + e.message);

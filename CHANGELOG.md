@@ -28,3 +28,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - settings.json中添加了`logLevel`,`logginWithCookies`设置，可以设置错误输出等级和选择是否使用cookies登录。
 ### Bug fix
 - （好像）修复了注销登陆后重新登录可能导致的cookies文件错误
+
+## [1.1.1] - 2022-01-23
+### Bug fix
+- 修复Status Bar错误
+- settings.json中添加`tlsRejectUnauthorized`选项用于某些TLS证书过期的VSCode
