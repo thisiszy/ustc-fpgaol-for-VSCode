@@ -77,14 +77,14 @@ export class AuthenticateService {
                 placeHolder: "",
                 ignoreFocusOut: true
             });
-            if (!username) { GlobalVars.statusBarItem.dispose(); return Promise.resolve(false); }
+            if (!username) { GlobalVars.statusBarItem.hide(); return Promise.resolve(false); }
             var password: string | undefined = await vscode.window.showInputBox({
                 prompt: "输入密码",
                 placeHolder: "",
                 password: true,
                 ignoreFocusOut: true
             });
-            if (!password) { GlobalVars.statusBarItem.dispose(); return Promise.resolve(false); }
+            if (!password) { GlobalVars.statusBarItem.hide(); return Promise.resolve(false); }
 
             // display captcha
             GlobalVars.statusBarItem.text = '$(sync~spin) Rendering';
@@ -113,7 +113,7 @@ export class AuthenticateService {
                 ignoreFocusOut: true
             });
             panel.dispose();
-            if (!captchaCode) { GlobalVars.statusBarItem.dispose(); return Promise.resolve(false); }
+            if (!captchaCode) { GlobalVars.statusBarItem.hide(); return Promise.resolve(false); }
             GlobalVars.statusBarItem.text = '$(sync~spin) Verifying';
             await httpService.sendRequest({
                 url: CAS_LOGIN_URL,

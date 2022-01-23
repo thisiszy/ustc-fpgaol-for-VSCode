@@ -25,10 +25,12 @@ export function configure(){
       Logger.level = LOG_LEVEL.SILENT;
     }
     const cookies: boolean | undefined = config.get('logginWithCookies');
-    if (cookies === undefined){
-      GlobalVars.logginWithCookies = true;
-    }
-    else {
+    if (cookies !== undefined){
       GlobalVars.logginWithCookies = cookies;
+    }
+
+    const tlsSetting: string | undefined = config.get('tlsRejectUnauthorized');
+    if (tlsSetting !== undefined){
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = tlsSetting;
     }
 }
