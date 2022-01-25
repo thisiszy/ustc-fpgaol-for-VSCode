@@ -2,13 +2,12 @@ import { HttpService } from "./httpservice";
 import * as vscode from 'vscode';
 import { CHECK_PAGE, DEVICE, HTTP_HEADER } from "../utils/const";
 import { AuthenticateService } from "./authentication";
-import { assert } from "console";
+import { GlobalVars } from "../utils/global";
 
 export class DeviceManager {
     public curStatus: Record<string, Record<string, string | boolean>> = {};
 
-    constructor(){
-    }
+    constructor(){}
 
     public async acquireDevice(typeSelected: string, httpService: HttpService, authenticateService: AuthenticateService): Promise<boolean> {
         let deviceType: Record<string, string> = DEVICE[typeSelected];
@@ -20,6 +19,8 @@ export class DeviceManager {
             vscode.window.showWarningMessage('尚未登陆或登陆已过期！');
             return Promise.resolve(false);
         }
+        GlobalVars.statusBarItem.text = `$(sync~spin) Acquiring`;
+        GlobalVars.statusBarItem.show();
         let resp = await httpService.sendRequest({
             url: deviceType.ACQUIRE_URL,
             method: "get",
@@ -27,6 +28,7 @@ export class DeviceManager {
             json: true
         });
         await this.updateDeviceStatus(resp);
+        GlobalVars.statusBarItem.hide();
         return Promise.resolve(true);
     }
 
@@ -40,6 +42,8 @@ export class DeviceManager {
             vscode.window.showWarningMessage('尚未登陆或登陆已过期！');
             return Promise.resolve(false);
         }
+        GlobalVars.statusBarItem.text = `$(sync~spin) Releasing`;
+        GlobalVars.statusBarItem.show();
         let resp = await httpService.sendRequest({
             url: deviceType.RELEASE_URL,
             method: "get",
@@ -47,10 +51,11 @@ export class DeviceManager {
             json: true
         });
         await this.updateDeviceStatus(resp);
+        GlobalVars.statusBarItem.hide();
         return Promise.resolve(true);
     }
 
-    public async updateDeviceStatus(resp?: any, needRequest = false, httpService?: HttpService, authenticateService?: AuthenticateService){
+    public async updateDeviceStatus(status?: any, needRequest = false, httpService?: HttpService, authenticateService?: AuthenticateService){
         if (needRequest){
             if (!(httpService && authenticateService)){
                 console.log('deviceManager.updateDeviceStatus need httpService and authenticateService');
@@ -60,7 +65,7 @@ export class DeviceManager {
                 vscode.window.showWarningMessage('尚未登陆或登陆已过期！');
                 return;
             }
-            resp = await httpService.sendRequest({
+            status = await httpService.sendRequest({
                 url: CHECK_PAGE,
                 method: "get",
                 header: HTTP_HEADER,
@@ -68,7 +73,7 @@ export class DeviceManager {
             });
         }
         var JSSoup = require('jssoup').default;
-        var soup = new JSSoup(resp);
+        var soup = new JSSoup(status);
         // 解析平台设备信息
         var platformDeviceTable = soup.find('tbody').contents;
         var platformDeviceInfo = [];
@@ -113,5 +118,6 @@ export class DeviceManager {
         this.curStatus[DEVICE.ZYBO.TYPE]['acquireTime'] = table[1][3];
         this.curStatus[DEVICE.ZYBO.TYPE]['expireTime'] = table[2][3];
         this.curStatus[DEVICE.ZYBO.TYPE]['link'] = table[3][3];
+        GlobalVars.statusBarItem.hide();
     }
 }

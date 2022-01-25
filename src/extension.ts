@@ -46,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			catch (e: any){
 				if (e.name === 'RequestError'){
-					Logger.error(`${e.name}: ${e.message}\nPossible Solution: 1. Update your vscode version.\n2. Add "tlsRejectUnauthorized": "0" to settings.json`);
+					Logger.error(`${e.name}: ${e.message}\nPossible Solution: 1. Update your vscode version.\n2. Add "tlsRejectUnauthorized": "0" to settings.json\n3. If the methods above don't help, please try to fix the bug for me, because the bug doesn't occur in any of my devices.`);
 				}
 				else{
 					Logger.error(e.name + ': ' + e.message);

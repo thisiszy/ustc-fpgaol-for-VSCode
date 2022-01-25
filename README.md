@@ -70,6 +70,9 @@
 
 ## Known Issues
 - 登录和注销可能会出现 "Syntax Error: JSON"，如果出现错误可以尝试在`settings.json`中将`logginWithCookies`设置为`false`。
+- 登录时在某些设备上可能出现 "RequestError: Error: certificate has expired Possible"，由于在作者所有设备上都无法复现该错误，所以暂时无法定位和解决bug，已知可能的解决方法包括
+  - 升级vscode
+  - 在`settings.json`中将`tlsRejectUnauthorized`设置为`"0"`
 
 ## Thanks
 - <a href='https://pngtree.com/so/Vector'>extension icon from pngtree.com/</a>

@@ -33,3 +33,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Bug fix
 - 修复Status Bar错误
 - settings.json中添加`tlsRejectUnauthorized`选项用于某些TLS证书过期的VSCode
+
+## [1.1.2] - 2022-01-25
+### Bug fix
+- 降低最低版本要求以适配Vlab的VSCode版本
