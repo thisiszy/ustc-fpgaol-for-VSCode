@@ -37,3 +37,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [1.1.2] - 2022-01-25
 ### Bug fix
 - 降低最低版本要求以适配Vlab的VSCode版本
+
+## [1.1.3] - 2022-01-25
+### Bug fix
+- 修复登录时500错误

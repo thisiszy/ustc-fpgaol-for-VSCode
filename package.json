@@ -2,7 +2,7 @@
 	"name": "ustc-fpgaol",
 	"displayName": "USTC FPGAOL for VSCode",
 	"description": "该插件用于USTC FPGAOL(FPGA online) 平台，集成了学习FPGA开发所需的常用功能",
-	"version": "1.1.2",
+	"version": "1.1.3",
 	"icon": "media/icon.png",
 	"publisher": "thisiszy",
 	"engines": {
