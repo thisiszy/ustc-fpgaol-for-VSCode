@@ -4,7 +4,7 @@ export const CAS_LOGIN_URL = "https://passport.ustc.edu.cn/login";
 export const CAS_LOGOUT_URL = "https://passport.ustc.edu.cn/logout";
 export const CAS_FPGAOL_LOGOUT_URL = "https://fpgaol.ustc.edu.cn/accounts/cas_logout/";
 export const CAS_CAPTCHA_URL = "https://passport.ustc.edu.cn/validatecode.jsp?type=login";
-export const CAS_RETURN_URL = "https://fpgaol.ustc.edu.cn/accounts/login_with_ticket";
+export const CAS_RETURN_URL = "https://fpgaol.ustc.edu.cn/accounts/login_with_ticket/";
 
 export const CHECK_PAGE = "https://fpgaol.ustc.edu.cn/fpga/usage/";
 
